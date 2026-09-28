@@ -11,40 +11,38 @@ elif resposta == "2":
 else:
     print("Erro, Opção invalida!")
 
-print("A categoria escolhida foi : ", resposta)
-print("A categoria possui", len(categoria), "palavras.")
+print(f"A categoria escolhida foi a : {resposta}, possui: {len(categoria)} palavras")
 
-posicao = int(input("Escolha a posição da palavra: "))
+posicao = int(input("Escolha a posição da palavra (1 - 4): "))
 
-palavra = categoria[posicao - 1]
+indice = posicao - 1
 
-print("Palavra:", "_" * len(palavra))
+palavra = (categoria[indice])
+
+palavra_escondida = list("_" * len(palavra))
 
 tentativas = 6
-letras_descobertas = ["_"] * len(palavra)
 
 print("Você terá 6 tentativas para descobrir a palavra.")
 
-while tentativas > 0:
-    print("\nPalavra:", " ".join(letras_descobertas))
-    print("Tentativas restantes:", tentativas)
-
+while "_" in palavra_escondida and tentativas > 0:
+    
+    palavra_atual = "".join(palavra_escondida)
+    print(f"Palavra: {palavra_atual}")
+    
+    print(f" Você possui {tentativas} tentativas restantes.")
+    
     letra = input("Digite uma letra: ")
-
+    
     if letra in palavra:
-        print("A letra está presente na palavra!")
-
         for i in range(len(palavra)):
             if palavra[i] == letra:
-                letras_descobertas[i] = letra
+                palavra_escondida[i] = letra
     else:
-        print("Você errou!")
         tentativas -= 1
-
-    if "_" not in letras_descobertas:
-        print("\nParabéns! Você descobriu a palavra!")
-        break
-
-if "_" in letras_descobertas:
-    print("\nVocê perdeu!")
-    print("A palavra era:", palavra)
+        print(f"Você errou! Tentativas restantes: {tentativas}")
+    
+if "_" not in palavra_escondida:
+    print(f"Parabéns! Você descobriu a palavra: {palavra}")
+else:
+    print(f"Você usou todas as tentativas! A palavra era: {palavra}")
