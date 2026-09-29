@@ -22,11 +22,18 @@ def read_leads():
     except json.JSONDecodeError:
         return []
 
+def save_leads(leads):
+    DB_PATH.write_text(
+        json.dumps(leads, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
 # CREATE
 def create_lead(lead_dict):
     leads = read_leads() # lista de dicionarios de leads
     leads.append(lead_dict)
-    DB_PATH.write_text(json.dumps(leads, ensure_ascii=False, indent=2), encoding="utf-8")
+    save_leads(leads)
+    return lead_dict
 
 # EXPORT LEADS COMO CSV
 def export_csv():
@@ -59,4 +66,21 @@ def read_leads_search(query):
 
     return results
 
+#UPDATE
+def update_lead(index, new_data):
+    leads = read_leads()
+    if index < 0 or index >= len(leads):
+        return None
+    leads[index].update(new_data)
+    save_leads(leads)
+    return leads[index]
+
+#DELETE
+def delete_lead(index):
+    leads = read_leads()
+    if index < 0 or index >= len(leads):
+        return None
+    removed = leads.pop(index)
+    save_leads(leads)
+    return removed
 

@@ -36,6 +36,10 @@ def search_leads():
     # envia a query para o control realizar a busca no leads.json
     leads_finded = control.read_leads_search(query)
 
+    if not leads_finded:
+        print("Nenhum lead encontrado")
+        return
+
     print(f"## | {"Nome":<15} | {"E-mail":<10} | Empresa")
     for i, lead in leads_finded:
         print(f"{i:02d} | {lead["name"]:<15} | {lead["email"]:<10} | {lead["company"]}")
@@ -49,6 +53,61 @@ def export_leads():
     else:
         print(f"Exportado para {path_csv}")
 
+def chose_index(): #lista os leads e devolve o q foi escolhido
+    leads= control.read_leads()
+    if not leads:
+        print("Nenhuma lead ainda")
+        return None
+
+    list_leads()
+    try:
+        index = int(input("Digite o número (##) do lead: "))
+
+    except ValueError:
+        print("Número invalido!")
+        return None
+
+    if index < 0 or index >= len(leads):
+        print("Lead não encontrada!")
+        return None
+
+    return index
+
+def update_lead():
+    index = chose_index()
+    if index is None:
+        return
+
+    lead = control.read_leads()[index]
+    print("Deixe em branco para manter o valor atual")
+
+    new_data = {}
+    for field, label in [("name", "Nome"), ("email", "E-mail"), ("company", "Empresa"), ("step", "Etapa de vendas")]:
+        value = input(f"{label} [{lead.get(field,"")}]: ").strip()
+        if value:
+            new_data[field] = value
+
+    if not new_data:
+        print("Nada alterado!")
+        return
+
+    control.update_lead(index, new_data)
+    print("Lead atualizado!")
+
+def delete_lead():
+    index = chose_index()
+    if index is None:
+        return
+
+    confirm = input("Tem certeza que deseja apagar ? (s/n): ").lower().strip()
+    if confirm != "s":
+        print("Operação cancelada!")
+        return
+
+    removed = control.delete_lead(index)
+    print(f"Lead {removed["name"]} removido")
+
+
 def main():
     while True:
         print("\nMini CRM de Leads")
@@ -56,6 +115,8 @@ def main():
         print("[2] Listar leads")
         print("[3] Buscar (nome/e-mail/empresa)")
         print("[4] Exportar CSV")
+        print("[5] Atualizar lead")
+        print("[6] Deletar lead")
         print("[0] Sair do programa")
 
         opt = input("Escolha uma opção: ")
@@ -68,6 +129,10 @@ def main():
             search_leads()
         elif opt == "4":
             export_leads()
+        elif opt == "5":
+            update_lead()
+        elif opt == "6":
+            delete_lead()
         elif opt == "0":
             print("Até mais...")
             break
