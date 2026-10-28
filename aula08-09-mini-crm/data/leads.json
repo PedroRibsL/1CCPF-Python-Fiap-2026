@@ -19,5 +19,19 @@
     "company": "Nike",
     "step": "novo",
     "created": "2026-09-17"
+  },
+  {
+    "name": "carlos",
+    "email": "fe4rr@a.com",
+    "company": "Youtube",
+    "step": "novo",
+    "created": "2026-10-28"
+  },
+  {
+    "name": "aaaa",
+    "email": "pepeoeuhre@gmail.com",
+    "company": "ateste",
+    "step": "novo",
+    "created": "2026-10-28"
   }
 ]
